@@ -84,52 +84,58 @@ dotnet test
 The diagram below shows how this Products API could fit into a distributed, event-driven microservices architecture.
 
 ```mermaid
-graph TB
+graph LR
     subgraph Clients
-        WEB[Angular Frontend]
-        MOBILE[Mobile App]
+        WEB["🌐 Angular App"]
+        MOB["📱 Mobile App"]
     end
 
-    subgraph API Gateway
-        GW[API Gateway<br/>Rate Limiting / Routing]
-    end
-
-    subgraph Microservices
-        PS[Products API<br/>.NET 9]
-        OS[Orders API]
-        PAY[Payments API]
-        NS[Notifications API]
-    end
-
-    subgraph Data Stores
-        PDB[(Products DB)]
-        ODB[(Orders DB)]
-        PAYDB[(Payments DB)]
-    end
-
-    subgraph Message Bus
-        MB[RabbitMQ / Kafka]
+    subgraph Gateway
+        GW["🔀 API Gateway"]
     end
 
     WEB --> GW
-    MOBILE --> GW
+    MOB --> GW
+
+    subgraph Services
+        direction TB
+        PS["🛒 Products API\n.NET 9"]
+        OS["📦 Orders API"]
+        PAY["💳 Payments API"]
+        NS["🔔 Notifications"]
+    end
+
     GW --> PS
     GW --> OS
     GW --> PAY
     GW --> NS
 
+    subgraph Data
+        direction TB
+        PDB[("Products DB")]
+        ODB[("Orders DB")]
+        PAYDB[("Payments DB")]
+    end
+
     PS --> PDB
     OS --> ODB
     PAY --> PAYDB
 
-    PS -- ProductCreated --> MB
-    OS -- OrderPlaced --> MB
-    PAY -- PaymentProcessed --> MB
+    subgraph Events["Event Bus — RabbitMQ"]
+        direction TB
+        E1(["ProductCreated"])
+        E2(["OrderPlaced"])
+        E3(["PaymentProcessed"])
+    end
 
-    MB -- ProductCreated --> OS
-    MB -- OrderPlaced --> PAY
-    MB -- PaymentProcessed --> OS
-    MB -- OrderConfirmed --> NS
+    PS -.-> E1
+    OS -.-> E2
+    PAY -.-> E3
+
+    E1 -.-> OS
+    E2 -.-> PAY
+    E3 -.-> OS
+    E3 -.-> NS
 ```
 
 ### Architecture Decisions
