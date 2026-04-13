@@ -19,46 +19,8 @@ import { CreateProductRequest } from '../../models/product.model';
     MatButtonModule,
     MatSnackBarModule
   ],
-  template: `
-    <form (ngSubmit)="onSubmit()" class="product-form">
-      <h3>Create New Product</h3>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Name</mat-label>
-        <input matInput [(ngModel)]="product.name" name="name" required />
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Description</mat-label>
-        <input matInput [(ngModel)]="product.description" name="description" />
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Price</mat-label>
-        <input matInput type="number" [(ngModel)]="product.price" name="price" required min="0.01" step="0.01" />
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Colour</mat-label>
-        <input matInput [(ngModel)]="product.colour" name="colour" required />
-      </mat-form-field>
-
-      <button mat-raised-button color="primary" type="submit" [disabled]="isLoading">
-        {{ isLoading ? 'Creating...' : 'Create Product' }}
-      </button>
-    </form>
-  `,
-  styles: [`
-    .product-form {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      max-width: 400px;
-    }
-    mat-form-field {
-      width: 100%;
-    }
-  `]
+  templateUrl: './product-form.component.html',
+  styleUrl: './product-form.component.scss'
 })
 export class ProductFormComponent {
   @Output() productCreated = new EventEmitter<void>();

@@ -1,0 +1,9 @@
+.product-form {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 400px;
+}
+mat-form-field {
+  width: 100%;
+}
